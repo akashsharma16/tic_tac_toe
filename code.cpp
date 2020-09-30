@@ -2,9 +2,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// This function that returns true if any of the row 
-// is crossed with the same player's move 
-bool rowCrossed(vector<vector<char>> board) 
+// This function that returns true if any of the row is crossed with the same player's move 
+bool isRowCrossed(vector<vector<char>> board) 
 { 
     for (int i=0; i<3; i++) 
     { 
@@ -16,9 +15,8 @@ bool rowCrossed(vector<vector<char>> board)
     return(false); 
 } 
   
-// This function that returns true if any of the column 
-// is crossed with the same player's move 
-bool columnCrossed(vector<vector<char>> board) 
+// This function that returns true if any of the column is crossed with the same player's move 
+bool isColumnCrossed(vector<vector<char>> board) 
 { 
     for (int i=0; i<3; i++) 
     { 
@@ -30,9 +28,8 @@ bool columnCrossed(vector<vector<char>> board)
     return(false); 
 } 
   
-// This function that returns true if any of the diagonal 
-// is crossed with the same player's move 
-bool diagonalCrossed(vector<vector<char>> board) 
+// This function that returns true if any of the diagonal is crossed with the same player's move 
+bool isDiagonalCrossed(vector<vector<char>> board) 
 { 
     if (board[0][0] == board[1][1] && 
         board[1][1] == board[2][2] &&  
@@ -51,8 +48,8 @@ bool diagonalCrossed(vector<vector<char>> board)
 // else it returns a false 
 bool isGameOver(vector<vector<char>> board) 
 { 
-    return(rowCrossed(board) || columnCrossed(board) 
-            || diagonalCrossed(board) ); 
+    return(isRowCrossed(board) || isColumnCrossed(board) 
+            || isDiagonalCrossed(board) ); 
 } 
 
 void showBoard(vector<vector<char>> board) 
