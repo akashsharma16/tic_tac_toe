@@ -198,6 +198,10 @@ while(1){
 	cout<<"enter your player no. 1 for 'x' or player 2 for 'o':"<<endl;
 	int p;
 	cin>>p;
+	if(p<1 || p>2){
+	    cout<<"Please enter a valid input"<<endl;
+	    continue;
+	}
 	/* human is used for booking the move slot for human 
 	   if player select's to be player2 then by movesCnt , he will be playing in when movesCnt is odd ( on 1, 3, 5, 7)
 	*/
