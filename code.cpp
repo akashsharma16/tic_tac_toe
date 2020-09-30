@@ -44,8 +44,7 @@ bool isDiagonalCrossed(vector<vector<char>> board)
     return(false); 
 } 
   
-// A function that returns true if the game is over 
-// else it returns a false 
+// This function that returns true if the game is over else it returns a false 
 bool isGameOver(vector<vector<char>> board) 
 { 
     return(isRowCrossed(board) || isColumnCrossed(board) 
@@ -65,6 +64,7 @@ void showBoard(vector<vector<char>> board)
     return; 
 } 
 
+// this function returns count the places occupied by human's move in the left diagonal
 int diagonalPosCheckLeft(vector<vector<char>> &v, char c) 
 {
     int cnt=0;
@@ -80,6 +80,7 @@ int diagonalPosCheckLeft(vector<vector<char>> &v, char c)
     return cnt;
 }
 
+// this function returns count the places occupied by human's move in the right diagonal
 int diagonalPosCheckRight(vector<vector<char>> &v, char c) 
 {
     int cnt=0;
@@ -95,8 +96,9 @@ int diagonalPosCheckRight(vector<vector<char>> &v, char c)
     return cnt;
 }
 
+// // this function returns count the places occupied by human's move in all directions (row-wise, column-wise and diagonal-wise)
 int checkPos(vector<vector<char>> &a,int x,int y,char c){
-    int cnt=0,m=0;
+    int cnt=0,m=0;// variable m is used for saving maximun places occupied by human for this position
     //counting human's move in column of y
     for(int i=0;i<3;i++){
         if(a[i][y]==c){
@@ -117,7 +119,7 @@ int checkPos(vector<vector<char>> &a,int x,int y,char c){
         m=cnt;
     }
     cnt=0;
-    int f=0;
+    int f=0;//this variable used for deciding whether we need to check diagonal for this position
     if(x==y){
         f=1;
     }
@@ -127,11 +129,9 @@ int checkPos(vector<vector<char>> &a,int x,int y,char c){
     //count human's move in both left and right diagonal 
     if(f==1){
         cnt = diagonalPosCheckLeft(a,c);
-        //cout<<"diagonal LEFT cnt for x = "<<x<<" and y = "<<y<<" is : "<<cnt<<endl;
         m=max(cnt,m);
         cnt= diagonalPosCheckRight(a,c);
         m=max(cnt,m);
-        //cout<<"diagonal RIGHT cnt for x = "<<x<<" and y = "<<y<<" is : "<<cnt<<endl;
         cnt=0;
     }
     return m;
@@ -140,13 +140,10 @@ int checkPos(vector<vector<char>> &a,int x,int y,char c){
 //placing computer's move 
 void playMove(vector<vector<char>> &a,char c){
     int x=0,y=0,m=INT_MIN;
-    //cout<<"============> PLACE MOVE :"<<c<<endl;
     for(int i=0;i<3;i++){
         for(int j=0;j<3;j++){
             if(a[i][j]=='.'){
                 int cnt=checkPos(a,i,j,c);
-                // cout<<" -----------> Count for move at x= "<<i<<" and y= "<<j<<" is :: "<<cnt<<endl;
-                
                 if(cnt>m){
                     m=cnt;
                     //storing the position of x and y for which the count of row , column or diagonal moves of human is maximum
@@ -196,12 +193,12 @@ while(1){
 	    cout<<"Please enter a valid input"<<endl;
 	    continue;
 	}
-	/* human is used for booking the move slot for human 
+	/* variable human is used for booking the move slot for human 
 	   if player select's to be player2 then by movesCnt , he will be playing in when movesCnt is odd ( on 1, 3, 5, 7)
 	*/
 	int human = 0;
 	char humanMove;//humanMove is used for saving which move human has select
-	int movesCnt=0;
+	int movesCnt=0;// used for counting no. of moves
 	if(p==1){
 	    human = 0;
 	    humanMove = 'x';
@@ -214,7 +211,7 @@ while(1){
 	    a[1][1]='x';
 	    movesCnt++;
 	}
-	int anyOneWon =0 ;
+	int anyOneWon =0 ;// used as flag to check whether any one won the game
 	while(movesCnt < 9 ){
 	    if(movesCnt % 2 == human){
 	    cout<<"Present state of board : "<<endl;
