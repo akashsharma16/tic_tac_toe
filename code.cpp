@@ -2,10 +2,63 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+// A function that returns true if any of the row 
+// is crossed with the same player's move 
+bool rowCrossed(vector<vector<char>> board) 
+{ 
+    for (int i=0; i<3; i++) 
+    { 
+        if (board[i][0] == board[i][1] && 
+            board[i][1] == board[i][2] &&  
+            board[i][0] != '.') 
+            return (true); 
+    } 
+    return(false); 
+} 
+  
+// A function that returns true if any of the column 
+// is crossed with the same player's move 
+bool columnCrossed(vector<vector<char>> board) 
+{ 
+    for (int i=0; i<3; i++) 
+    { 
+        if (board[0][i] == board[1][i] && 
+            board[1][i] == board[2][i] &&  
+            board[0][i] != '.') 
+            return (true); 
+    } 
+    return(false); 
+} 
+  
+// A function that returns true if any of the diagonal 
+// is crossed with the same player's move 
+bool diagonalCrossed(vector<vector<char>> board) 
+{ 
+    if (board[0][0] == board[1][1] && 
+        board[1][1] == board[2][2] &&  
+        board[0][0] != '.') 
+        return(true); 
+          
+    if (board[0][2] == board[1][1] && 
+        board[1][1] == board[2][0] && 
+         board[0][2] != '.') 
+        return(true); 
+  
+    return(false); 
+} 
+  
+// A function that returns true if the game is over 
+// else it returns a false 
+bool gameOver(vector<vector<char>> board) 
+{ 
+    return(rowCrossed(board) || columnCrossed(board) 
+            || diagonalCrossed(board) ); 
+} 
+
 void showBoard(vector<vector<char>> board) 
 { 
     printf("\n\n"); 
-      
+    cout<<"----------------------------------------------------------------"<<endl;
     printf("\t\t\t  %c | %c  | %c  \n", board[0][0], 
                              board[0][1], board[0][2]); 
     printf("\t\t\t--------------\n"); 
@@ -14,9 +67,39 @@ void showBoard(vector<vector<char>> board)
     printf("\t\t\t--------------\n"); 
     printf("\t\t\t  %c | %c  | %c  \n\n", board[2][0], 
                              board[2][1], board[2][2]); 
-   
+   cout<<"----------------------------------------------------------------"<<endl;
     return; 
 } 
+
+int diagonalPosCheckLeft(vector<vector<char>> &v, char c) 
+{
+    int cnt=0;
+    if(v[1][1] == c){
+        cnt++;
+    }
+    if(v[0][2] == c){
+        cnt++;
+    }
+    if (v[2][0] == c){
+        cnt++;
+    }
+    return cnt;
+}
+
+int diagonalPosCheckRight(vector<vector<char>> &v, char c) 
+{
+    int cnt=0;
+    if (v[0][0] == c){
+        cnt++;
+    }
+    if(v[1][1] == c){
+        cnt++;
+    }
+    if (v[2][2] == c){
+        cnt++;
+    }
+    return cnt;
+}
 
 int checkPos(vector<vector<char>> &a,int x,int y,char c){
     int cnt=0,m=0;
@@ -47,72 +130,27 @@ int checkPos(vector<vector<char>> &a,int x,int y,char c){
     }
     
     if(f==1){
-        cnt = diagonalPosCheckLeft(v,c);
+        cnt = diagonalPosCheckLeft(a,c);
+        //cout<<"diagonal LEFT cnt for x = "<<x<<" and y = "<<y<<" is : "<<cnt<<endl;
         m=max(cnt,m);
-        cnt= diagonalPosCheckRight(v,c);
+        cnt= diagonalPosCheckRight(a,c);
         m=max(cnt,m);
+        //cout<<"diagonal RIGHT cnt for x = "<<x<<" and y = "<<y<<" is : "<<cnt<<endl;
         cnt=0;
-        /*
-        // for(int i=0;i<3;i++){
-        //     if(a[i][i]==c){
-        //         cnt++;
-        //     }
-        // }
-        
-        // if(cnt>m){
-        //     m=cnt;
-        // }
-        // cnt=0;
-        
-        // for(int i=0,j=2;i<3 && j<3;i++,j--){
-        //     if(a[i][j]==c){
-        //         cnt++;
-        //     }
-        // }
-        */
     }
     return m;
 }
 
-int diagonalPosCheckRight(vector<vector<char>> &v, char c) 
-{
-    int cnt=0;
-    if (v[0][0] == c){
-        cnt++;
-    }
-    if(v[1][1] == c){
-        cnt++;
-    }
-    if (v[2][2] == c){
-        cnt++;
-    }
-    return cnt;
-}
-
-int diagonalPosCheckLeft(vector<vector<char>> &v, char c) 
-{
-    int cnt=0;
-    if(v[1][1] == c){
-        cnt++;
-    }
-    if(v[0][2] == c){
-        cnt++;
-    }
-    if (v[2][0] == c){
-        cnt++;
-    }
-    return cnt;
-}
-
 void playMove(vector<vector<char>> &a,char c){
-    int x=0,y=0,m=0;
-    
+    int x=0,y=0,m=INT_MIN;
+    //cout<<"============> PLACE MOVE :"<<c<<endl;
     for(int i=0;i<3;i++){
         for(int j=0;j<3;j++){
             if(a[i][j]=='.'){
-                int c=checkPos(a,i,j,c);
-                if(c>m){
-                    m=c;
+                int cnt=checkPos(a,i,j,c);
+                // cout<<" -----------> Count for move at x= "<<i<<" and y= "<<j<<" is :: "<<cnt<<endl;
+                if(cnt>m){
+                    m=cnt;
                     x=i;
                     y=j;
                 }
@@ -131,19 +169,17 @@ void playMove(vector<vector<char>> &a,char c){
 int placeMove(vector<vector<char>> &a,int x,int y,int t){
     if(a[x][y]=='.'){
         if(t==1)
-            a[0][0]='x';
+            a[x][y]='x';
         else
-            a[0][0]='o';
+            a[x][y]='o';
             
         return 1;
     }
-    else{
-        return 0;
-    }
+    return 0;
 }
 
 int main() {
-	// your code goes here
+
 	vector<vector<char>> a;
 	for(int i=0;i<3;i++){
 	    vector<char> v;
@@ -152,17 +188,29 @@ int main() {
 	    }
 	    a.push_back(v);
 	}
-	cout<<"enter your player no. 1 = 'x' or player 2 'o':"<<endl;
+	cout<<"enter your player no. 1 for 'x' or player 2 for 'o':"<<endl;
 	int p;
-	char player1 = 'x',player2 = 'o';
-	int movesCnt=0;
 	cin>>p;
+	int human = 0;
+	char humanMove;
+	int movesCnt=0;
+	if(p==1){
+	    human = 0;
+	    humanMove = 'x';
+	}
+	else{
+	    human = 1;
+	    humanMove = 'o';
+	}
 	if(p==2){
 	    a[1][1]='x';
-	    showBoard(a);
 	    movesCnt++;
 	}
+	int anyOneWon =0 ;
 	while(movesCnt < 9 ){
+	    if(movesCnt % 2 == human){
+	    cout<<"Present state of board : "<<endl;
+	    showBoard(a);
 	    cout<<"Enter your move no.:"<<endl;
 	    int t;
 	    cin>>t;
@@ -172,47 +220,39 @@ int main() {
 	    }
 	    int f=0;
 	    int x=(t-1)/3,y=(t-1)%3;
-	   // if(t==1){
-	        f=placeMove(a,x,y,p);
-	   // }
-	   /*
-	    else if(t==2){
-	        f=placeMove(a,0,1,p);
-	    }
-	    else if(t==3){
-	        f=placeMove(a,0,2,p);
-	    }
-	    else if(t==4){
-	        f=placeMove(a,1,0,p);
-	    }
-	    else if(t==5){
-	        f=placeMove(a,1,1,p);
-	    }
-	    else if(t==6){
-	        f=placeMove(a,1,2,p);
-	    }
-	    else if(t==7){
-	        f=placeMove(a,2,0,p);
-	    }
-	    else if(t==8){
-	        f=placeMove(a,2,1,p);
-	    }
-	    else if(t==9){
-	        f=placeMove(a,2,2,p);
-	    }*/
-	    
+	    f=placeMove(a,x,y,p);
 	    if(f==0){
-	        cout<<"This position already acquired"<<endl;
-	        continue;
+    	   cout<<"This position already acquired"<<endl;
+    	   continue;
+    	}
+	    cout<<"Human move placed at x="<<x<<" and y="<<y<<endl;
+	    showBoard(a);
+	    if(gameOver(a)){
+	        cout<<"Human won this game"<<endl;
+	        showBoard(a);
+	        anyOneWon =1;
+	        break;
 	    }
-	    
-	    int check=0;
-	    if(p==1){
-	        check = checkPos(a,x,y,'x');
 	    }
 	    else{
-	        check = 
+	        playMove(a,humanMove);
+	        if(gameOver(a)){
+	            cout<<"Computer won this game"<<endl;
+	            showBoard(a);
+	            anyOneWon = 1;
+	            break;
+	        }
 	    }
+	    movesCnt++;
 	}
+
+
+    if(anyOneWon == 0){
+        showBoard(a);
+        cout<<" NO ONE WON THIS GAME "<<endl;
+    }
+    cout<<" ========= xxxxx ========== "<<endl;
+    cout<<"         GAME OVER          "<<endl;
 	return 0;
 }
+
