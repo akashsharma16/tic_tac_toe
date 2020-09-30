@@ -152,17 +152,24 @@ int main() {
 	    }
 	    a.push_back(v);
 	}
-	cout<<"enter your player no. 1 = 'x' or player 2 'o':"<<endl;
+	cout<<"enter your player no. 1 for 'x' or player 2 for 'o':"<<endl;
 	int p;
 	char player1 = 'x',player2 = 'o';
 	int movesCnt=0;
 	cin>>p;
+	if(p==1){
+	    humanMove = 'x';
+	}
+	else{
+	    humanMove = 'o';
+	}
 	if(p==2){
 	    a[1][1]='x';
 	    showBoard(a);
 	    movesCnt++;
 	}
 	while(movesCnt < 9 ){
+	    if(movesCnt % 2 == human){
 	    cout<<"Enter your move no.:"<<endl;
 	    int t;
 	    cin>>t;
@@ -205,14 +212,12 @@ int main() {
 	        cout<<"This position already acquired"<<endl;
 	        continue;
 	    }
-	    
-	    int check=0;
-	    if(p==1){
-	        check = checkPos(a,x,y,'x');
 	    }
 	    else{
-	        check = 
+	        playMove(a,humanMove);
 	    }
+	    movesCnt++;
+	    showBoard(a);
 	}
 	return 0;
 }
