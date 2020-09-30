@@ -103,6 +103,7 @@ int diagonalPosCheckRight(vector<vector<char>> &v, char c)
 
 int checkPos(vector<vector<char>> &a,int x,int y,char c){
     int cnt=0,m=0;
+    //counting human's move in column of y
     for(int i=0;i<3;i++){
         if(a[i][y]==c){
             cnt++;
@@ -112,6 +113,7 @@ int checkPos(vector<vector<char>> &a,int x,int y,char c){
         m=cnt;
     }
     cnt=0;
+    //counting human's move in row of x
     for(int i=0;i<3;i++){
         if(a[x][i]==c){
             cnt++;
@@ -128,7 +130,7 @@ int checkPos(vector<vector<char>> &a,int x,int y,char c){
     else if((x==2 && y==0) || (x==0 && y==2)){
         f=1;
     }
-    
+    //count human's move in both left and right diagonal 
     if(f==1){
         cnt = diagonalPosCheckLeft(a,c);
         //cout<<"diagonal LEFT cnt for x = "<<x<<" and y = "<<y<<" is : "<<cnt<<endl;
@@ -141,6 +143,7 @@ int checkPos(vector<vector<char>> &a,int x,int y,char c){
     return m;
 }
 
+//placing computer's move 
 void playMove(vector<vector<char>> &a,char c){
     int x=0,y=0,m=INT_MIN;
     //cout<<"============> PLACE MOVE :"<<c<<endl;
@@ -149,8 +152,10 @@ void playMove(vector<vector<char>> &a,char c){
             if(a[i][j]=='.'){
                 int cnt=checkPos(a,i,j,c);
                 // cout<<" -----------> Count for move at x= "<<i<<" and y= "<<j<<" is :: "<<cnt<<endl;
+                
                 if(cnt>m){
                     m=cnt;
+                    //storing the position of x and y for which the count of row , column or diagonal moves of human is maximum
                     x=i;
                     y=j;
                 }
@@ -166,6 +171,7 @@ void playMove(vector<vector<char>> &a,char c){
     }
 }
 
+//placing human's move
 int placeMove(vector<vector<char>> &a,int x,int y,int t){
     if(a[x][y]=='.'){
         if(t==1)
@@ -180,6 +186,7 @@ int placeMove(vector<vector<char>> &a,int x,int y,int t){
 
 int main() {
 
+while(1){
 	vector<vector<char>> a;
 	for(int i=0;i<3;i++){
 	    vector<char> v;
@@ -249,10 +256,19 @@ int main() {
 
     if(anyOneWon == 0){
         showBoard(a);
-        cout<<" NO ONE WON THIS GAME "<<endl;
+        cout<<" THIS GAME IS A DRAW "<<endl;
     }
     cout<<" ========= xxxxx ========== "<<endl;
-    cout<<"         GAME OVER          "<<endl;
+    cout<<"         THIS IS GAME OVER          "<<endl;
+    
+    cout<<" Do you want to play once more ?"<<endl;
+    cout<<" Enter 1 if yes or 0 if no:"<<endl;
+    int e=0;
+    cin>>e;
+    if(e==0){
+        break;
+    }
+}
 	return 0;
 }
 
