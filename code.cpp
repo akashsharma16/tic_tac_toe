@@ -2,6 +2,22 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+void showBoard(vector<vector<char>> board) 
+{ 
+    printf("\n\n"); 
+      
+    printf("\t\t\t  %c | %c  | %c  \n", board[0][0], 
+                             board[0][1], board[0][2]); 
+    printf("\t\t\t--------------\n"); 
+    printf("\t\t\t  %c | %c  | %c  \n", board[1][0], 
+                             board[1][1], board[1][2]); 
+    printf("\t\t\t--------------\n"); 
+    printf("\t\t\t  %c | %c  | %c  \n\n", board[2][0], 
+                             board[2][1], board[2][2]); 
+   
+    return; 
+} 
+
 int checkPos(vector<vector<char>> &a,int x,int y,char c){
     int cnt=0,m=0;
     for(int i=0;i<3;i++){
@@ -31,29 +47,61 @@ int checkPos(vector<vector<char>> &a,int x,int y,char c){
     }
     
     if(f==1){
-        for(int i=0;i<3;i++){
-            if(a[i][i]==c){
-                cnt++;
-            }
-        }
-        
-        if(cnt>m){
-            m=cnt;
-        }
+        cnt = diagonalPosCheckLeft(v,c);
+        m=max(cnt,m);
+        cnt= diagonalPosCheckRight(v,c);
+        m=max(cnt,m);
         cnt=0;
+        /*
+        // for(int i=0;i<3;i++){
+        //     if(a[i][i]==c){
+        //         cnt++;
+        //     }
+        // }
         
-        for(int i=0,j=2;i<3 && j<3;i++,j--){
-            if(a[i][j]==c){
-                cnt++;
-            }
-        }
+        // if(cnt>m){
+        //     m=cnt;
+        // }
+        // cnt=0;
         
-        if(cnt>m){
-            m=cnt;
-        }
-        cnt=0;
+        // for(int i=0,j=2;i<3 && j<3;i++,j--){
+        //     if(a[i][j]==c){
+        //         cnt++;
+        //     }
+        // }
+        */
     }
     return m;
+}
+
+int diagonalPosCheckRight(vector<vector<char>> &v, char c) 
+{
+    int cnt=0;
+    if (v[0][0] == c){
+        cnt++;
+    }
+    if(v[1][1] == c){
+        cnt++;
+    }
+    if (v[2][2] == c){
+        cnt++;
+    }
+    return cnt;
+}
+
+int diagonalPosCheckLeft(vector<vector<char>> &v, char c) 
+{
+    int cnt=0;
+    if(v[1][1] == c){
+        cnt++;
+    }
+    if(v[0][2] == c){
+        cnt++;
+    }
+    if (v[2][0] == c){
+        cnt++;
+    }
+    return cnt;
 }
 
 void playMove(vector<vector<char>> &a,char c){
@@ -106,11 +154,15 @@ int main() {
 	}
 	cout<<"enter your player no. 1 = 'x' or player 2 'o':"<<endl;
 	int p;
+	char player1 = 'x',player2 = 'o';
+	int movesCnt=0;
 	cin>>p;
 	if(p==2){
 	    a[1][1]='x';
+	    showBoard(a);
+	    movesCnt++;
 	}
-	while(1){
+	while(movesCnt < 9 ){
 	    cout<<"Enter your move no.:"<<endl;
 	    int t;
 	    cin>>t;
@@ -119,9 +171,11 @@ int main() {
 	        continue;
 	    }
 	    int f=0;
-	    if(t==1){
-	        f=placeMove(a,0,0,p);
-	    }
+	    int x=(t-1)/3,y=(t-1)%3;
+	   // if(t==1){
+	        f=placeMove(a,x,y,p);
+	   // }
+	   /*
 	    else if(t==2){
 	        f=placeMove(a,0,1,p);
 	    }
@@ -145,14 +199,20 @@ int main() {
 	    }
 	    else if(t==9){
 	        f=placeMove(a,2,2,p);
-	    }
+	    }*/
 	    
 	    if(f==0){
 	        cout<<"This position already acquired"<<endl;
 	        continue;
 	    }
 	    
-	    
+	    int check=0;
+	    if(p==1){
+	        check = checkPos(a,x,y,'x');
+	    }
+	    else{
+	        check = 
+	    }
 	}
 	return 0;
 }
