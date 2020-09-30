@@ -2,7 +2,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// A function that returns true if any of the row 
+// This function that returns true if any of the row 
 // is crossed with the same player's move 
 bool rowCrossed(vector<vector<char>> board) 
 { 
@@ -16,7 +16,7 @@ bool rowCrossed(vector<vector<char>> board)
     return(false); 
 } 
   
-// A function that returns true if any of the column 
+// This function that returns true if any of the column 
 // is crossed with the same player's move 
 bool columnCrossed(vector<vector<char>> board) 
 { 
@@ -30,7 +30,7 @@ bool columnCrossed(vector<vector<char>> board)
     return(false); 
 } 
   
-// A function that returns true if any of the diagonal 
+// This function that returns true if any of the diagonal 
 // is crossed with the same player's move 
 bool diagonalCrossed(vector<vector<char>> board) 
 { 
@@ -49,7 +49,7 @@ bool diagonalCrossed(vector<vector<char>> board)
   
 // A function that returns true if the game is over 
 // else it returns a false 
-bool gameOver(vector<vector<char>> board) 
+bool isGameOver(vector<vector<char>> board) 
 { 
     return(rowCrossed(board) || columnCrossed(board) 
             || diagonalCrossed(board) ); 
@@ -198,8 +198,11 @@ while(1){
 	cout<<"enter your player no. 1 for 'x' or player 2 for 'o':"<<endl;
 	int p;
 	cin>>p;
+	/* human is used for booking the move slot for human 
+	   if player select's to be player2 then by movesCnt , he will be playing in when movesCnt is odd ( on 1, 3, 5, 7)
+	*/
 	int human = 0;
-	char humanMove;
+	char humanMove;//humanMove is used for saving which move human has select
 	int movesCnt=0;
 	if(p==1){
 	    human = 0;
@@ -234,16 +237,16 @@ while(1){
     	}
 	    cout<<"Human move placed at x="<<x<<" and y="<<y<<endl;
 	    showBoard(a);
-	    if(gameOver(a)){
-	        cout<<"Human won this game"<<endl;
-	        showBoard(a);
-	        anyOneWon =1;
-	        break;
-	    }
+    	    if(isGameOver(a)){
+    	        cout<<"Human won this game"<<endl;
+    	        showBoard(a);
+    	        anyOneWon =1;
+    	        break;
+    	    }
 	    }
 	    else{
 	        playMove(a,humanMove);
-	        if(gameOver(a)){
+	        if(isGameOver(a)){
 	            cout<<"Computer won this game"<<endl;
 	            showBoard(a);
 	            anyOneWon = 1;
